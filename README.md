@@ -1,0 +1,2 @@
+# place_number_trainer_v1.0
+Place number trainer It is a program developed in Python 3.9 oriented to learn memory palaces with numbered places. It allows to index each place using the number form method. The images of number form go in the nnumbers folder. The images of places go in the Places folder. They must be numbered from 00 to 99. Once the main.py file is executed, the window is displayed. To move forward and backward just click on the prev and next buttons. To exit just click on the close X button. 
