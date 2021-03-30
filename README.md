@@ -6,9 +6,7 @@ Please unzip the file numbers.zip in folder numbers. If you are not confortable 
 
 First create a virtualenv for safe installing in your computer:
 
-'''bash
 $ virtualenv env
-'''
 
 And activate:
 
