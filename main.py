@@ -40,7 +40,8 @@ PIL
 
 # FOR PLACES.
 # Get the folder containing the images of places from the user.
-places = '/home/marco/Documentos/place_number_trainer/places'
+places = './places'
+
 if not places:
     sg.popup_cancel('Cancelling')
     raise SystemExit()
@@ -67,7 +68,7 @@ del plist0
 # FOR NUMBERS.
 
 # Get the folder containing the images of places from the user.
-numbers = '/home/marco/Documentos/place_number_trainer/numbers'
+numbers = './numbers'
 if not numbers:
     sg.popup_cancel('Cancelling')
     raise SystemExit()
