@@ -1,4 +1,7 @@
+# _*_coding: utf-8_*_
 #!/usr/bin/env python
+# Imports.
+
 import PySimpleGUI as sg
 import os
 from PIL import Image, ImageTk
@@ -35,133 +38,136 @@ Python3
 PIL
 """
 
-# FOR PLACES
-# Get the folder containing the images of places from the user
+# FOR PLACES.
+# Get the folder containing the images of places from the user.
 places = '/home/marco/Documentos/place_number_trainer/places'
 if not places:
     sg.popup_cancel('Cancelling')
     raise SystemExit()
 
-# PIL supported image types
-img_types = (".png", ".jpg", "jpeg", ".tiff", ".bmp")
+# PIL supported image types.
+img_types = (".png", ".jpg", ".jpeg", ".tiff", ".bmp")
 
-# get list of files in folder
+# Get list of files in folder.
 plist0 = os.listdir(places)
 
-# create sub list of image files (no sub folders, no wrong file types)
+# Create sub list of image files (no sub folders, no wrong file types).
 pnames = [f for f in plist0 if os.path.isfile(
     os.path.join(places, f)) and f.lower().endswith(img_types)]
 
-# number of iamges found
+# Number of iamges found.
 num_files = len(pnames)                
 if num_files == 0:
     sg.popup('No files in folder')
     raise SystemExit()
 
-# no longer needed
+# No longer needed.
 del plist0                             
 
-# FOR NUMBERS
+# FOR NUMBERS.
 
-# Get the folder containing the images of places from the user
+# Get the folder containing the images of places from the user.
 numbers = '/home/marco/Documentos/place_number_trainer/numbers'
 if not numbers:
     sg.popup_cancel('Cancelling')
     raise SystemExit()
 
-# PIL supported image types
+# PIL supported image types.
 img_types = (".png", ".jpg", "jpeg", ".tiff", ".bmp")
 
-# get list of files in folder
+# Get list of files in folder.
 nlist0 = os.listdir(numbers)
 
-# create sub list of image files (no sub folders, no wrong file types)
+# Create sub list of image files (no sub folders, no wrong file types).
 nnames = [f for f in nlist0 if os.path.isfile(
     os.path.join(numbers, f)) and f.lower().endswith(img_types)]
 
-# number of iamges found
+# Number of iamges found.
 num_files = len(nnames)                
 if num_files == 0:
     sg.popup('No files in folder')
     raise SystemExit()
 
-# no longer needed
-del nlist0                             
+# No longer needed.
+del nlist0
+
 # ------------------------------------------------------------------------------
-# use PIL to read data of one image
+# Use PIL to read data of one image.
 # ------------------------------------------------------------------------------
 
 
 def get_mix_img_data(p,n, maxsize=(500, 500), first=False):
     """Generate image data using PIL
     """
-    img = Image.open(p).convert("RGBA")
-    img.thumbnail(maxsize)
-    peg = Image.open(n).convert("RGBA")
-    peg.thumbnail((100,100))
-    img.paste(peg, (200,200),peg)
-    if first:                     # tkinter is inactive the first time
+    img = Image.open(p).convert("RGBA") # Open pic in rgba mode.
+    img.thumbnail(maxsize)              # Maximize pic.
+    peg = Image.open(n).convert("RGBA") # Open pic in rgba mode.
+    peg.thumbnail((100,100))            # Maximize pic.
+    img.paste(peg, (200,200),peg)       # passte small pic in big pic.
+    if first:                           # tkinter is inactive the first time.
         bio = io.BytesIO()
-        img.save(bio, format="PNG")
+        img.save(bio, format="PNG")     # Store in IO data the pic.
         del img
         return bio.getvalue()
-    return ImageTk.PhotoImage(img)
+    return ImageTk.PhotoImage(img)      # Commposed pic is returned.
 # ------------------------------------------------------------------------------
 
 
-# make these 2 elements outside the layout as we want to "update" them later
-# initialize to the first file in the list
-pfilename = os.path.join(places, pnames[0])  # name of first file in list
-nfilename = os.path.join(numbers, nnames[0])  # name of first file in list
-image_elem = sg.Image(data=get_mix_img_data(pfilename,nfilename, first=True)) # PUt pic in wondow
-filename_display_elem = sg.Text(pfilename, size=(80, 3)) # display elem
+# Make these 2 elements outside the layout as we want to "update" them later.
+# Initialize to the first file in the list.
+pfilename = os.path.join(places, pnames[0])   # Name of first file in list.
+nfilename = os.path.join(numbers, nnames[0])  # Name of first file in list.
+image_elem = sg.Image(data=get_mix_img_data(pfilename,nfilename, first=True)) # Put pic in window.
+filename_display_elem = sg.Text(pfilename, size=(80, 3)) # Display elem.
 file_num_display_elem = sg.Text('File 1 of {}'.format(num_files), size=(15, 1))
 
-# define layout, show and read the form
+# Define layout, show and read the form.
 col = [[filename_display_elem],
        [image_elem]]
 
-# [sg.Listbox(values=fnames, change_submits=True, size=(60, 30), key='listbox')],
+# Structure files in columns to display result.
 col_files = [[sg.Button('Next', size=(8, 2)), sg.Button('Prev', size=(8, 2)), file_num_display_elem]]
 
+# Main layout.
 layout = [[sg.Column(col_files), sg.Column(col)]]
 
+# Put all pieces in same place.
 window = sg.Window('Place Number Trainer', layout, return_keyboard_events=True,
                    location=(0, 0), use_default_focus=False)
 
-# loop reading the user input and displaying image, filename
+# Loop reading the user input and displaying image, filename.
 i = 0
 while True:
-    # read the form
+    # Read the form.
     event, values = window.read()
-    # perform button and keyboard operations
+    # Perform button and keyboard operations.
     if event == sg.WIN_CLOSED:
         break
     elif event in ('Next', 'MouseWheel:Down', 'Down:40', 'Next:34'):
         i += 1
         if i >= num_files:
             i -= num_files
-        pfilename = os.path.join(places, pnames[i])
-        nfilename = os.path.join(numbers, nnames[i])
+        pfilename = os.path.join(places, pnames[i])  # Same name file place.
+        nfilename = os.path.join(numbers, nnames[i]) # Same name file number.
 
     elif event in ('Prev', 'MouseWheel:Up', 'Up:38', 'Prior:33'):
         i -= 1
         if i < 0:
             i = num_files + i
-        pfilename = os.path.join(places, pnames[i])
-        nfilename = os.path.join(numbers, nnames[i])
-    elif event == 'listbox':            # something from the listbox
-        f = values["listbox"][0]            # selected filename
-        pfilename = os.path.join(places, f)  # read this file
-        i = pnames.index(f)                 # update running index
+        pfilename = os.path.join(places, pnames[i])  # Same name file place.
+        nfilename = os.path.join(numbers, nnames[i]) # Same name file number.
+    elif event == 'listbox':                    # Something from the listbox.
+        f = values["listbox"][0]                # Selected filename.
+        pfilename = os.path.join(places, f)     # Read this file.
+        i = pnames.index(f)                     # Update running index.
     else:
         pfilename = os.path.join(places, pnames[i])
 
-    # update window with new image
+    # Update window with new image.
     image_elem.update(data=get_mix_img_data(pfilename, nfilename, first=True))
-    # update window with filename
+    # Update window with filename.
     filename_display_elem.update(pfilename)
-    # update page display
+    # Update page display.
     file_num_display_elem.update('File {} of {}'.format(i+1, num_files))
 
 window.close()
