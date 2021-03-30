@@ -15,4 +15,5 @@ $ pip install -r requirements.txt
 Launch the software:
 $ python main.py
 
-This software are only tested under Ubuntu 20, Python 3.8.5 
++ This software are only tested under Ubuntu 20, Python 3.8.5, 29.3.21
++ This software are only tested under Manjaro 20, Python 3.9.2, 29.3.21
