@@ -15,4 +15,4 @@ $ pip install -r requirements.txt
 Launch the software:
 $ python main.py
 
-This software are only tested under Ubuntu 20, Python 3.9 
+This software are only tested under Ubuntu 20, Python 3.8.5 
