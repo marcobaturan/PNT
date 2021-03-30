@@ -5,17 +5,21 @@ Please add your picture's place to folder places, numbered from 00 to 99, read a
 Please unzip the file numbers.zip in folder numbers. If you are not confortable with the picture election you can put other tpe of images. Recomended bmp or png.
 
 First create a virtualenv for safe installing in your computer:
-'''bash
+
 $ virtualenv env
-'''
+
 And activate:
+
 $source env/bin/activate
 
 Install dependencies:
+
 $ pip install -r requirements.txt
 
 Launch the software:
+
 $ python main.py
 
 + This software are only tested under Ubuntu 20, Python 3.8.5, 29.3.21
++ 
 + This software are only tested under Manjaro 20, Python 3.9.2, 29.3.21
