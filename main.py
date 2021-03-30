@@ -54,7 +54,7 @@ plist0 = os.listdir(places)
 # Create sub list of image files (no sub folders, no wrong file types).
 pnames = [f for f in plist0 if os.path.isfile(
     os.path.join(places, f)) and f.lower().endswith(img_types)]
-
+pnames.sort() # Ordered the list.
 # Number of iamges found.
 num_files = len(pnames)                
 if num_files == 0:
@@ -81,6 +81,7 @@ nlist0 = os.listdir(numbers)
 # Create sub list of image files (no sub folders, no wrong file types).
 nnames = [f for f in nlist0 if os.path.isfile(
     os.path.join(numbers, f)) and f.lower().endswith(img_types)]
+nnames.sort() # Ordered the list.
 
 # Number of iamges found.
 num_files = len(nnames)                
@@ -116,20 +117,18 @@ def get_mix_img_data(p,n, maxsize=(500, 500), first=False):
 # Make these 2 elements outside the layout as we want to "update" them later.
 # Initialize to the first file in the list.
 pfilename = os.path.join(places, pnames[0])   # Name of first file in list.
+
 nfilename = os.path.join(numbers, nnames[0])  # Name of first file in list.
 image_elem = sg.Image(data=get_mix_img_data(pfilename,nfilename, first=True)) # Put pic in window.
 filename_display_elem = sg.Text(pfilename, size=(80, 3)) # Display elem.
-file_num_display_elem = sg.Text('File 1 of {}'.format(num_files), size=(15, 1))
-
-# Define layout, show and read the form.
-col = [[filename_display_elem],
-       [image_elem]]
+file_num_display_elem = sg.Text('file 1 of {}'.format(num_files), size=(15, 1))
 
 # Structure files in columns to display result.
-col_files = [[sg.Button('Next', size=(8, 2)), sg.Button('Prev', size=(8, 2)), file_num_display_elem]]
+col_files = [[sg.Button('Prev', size=(8, 2)),sg.Button('Next', size=(8, 2)), file_num_display_elem],
+             [image_elem]]
 
 # Main layout.
-layout = [[sg.Column(col_files), sg.Column(col)]]
+layout = [[sg.Column(col_files)]] 
 
 # Put all pieces in same place.
 window = sg.Window('Place Number Trainer', layout, return_keyboard_events=True,
@@ -162,12 +161,13 @@ while True:
         i = pnames.index(f)                     # Update running index.
     else:
         pfilename = os.path.join(places, pnames[i])
-
+        nfilename = os.path.join(numbers, nnames[i])
+    
     # Update window with new image.
     image_elem.update(data=get_mix_img_data(pfilename, nfilename, first=True))
     # Update window with filename.
-    filename_display_elem.update(pfilename)
+    #filename_display_elem.update(pfilename)
     # Update page display.
-    file_num_display_elem.update('File {} of {}'.format(i+1, num_files))
+    file_num_display_elem.update('Place: {} num: {}'.format(i, i))
 
 window.close()
