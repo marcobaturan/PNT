@@ -20,5 +20,11 @@ Launch the software:
 
 $ python main.py
 
+## Executable 
+After apply PyInstaller in one file, now you can lounch by terminal:
+$ ./main
+
+Or follow this [instructions](https://www.unixmen.com/create-whisker-menu-launcher-manjaro-xfce/)
 + This software are only tested under Ubuntu 20, Python 3.8.5, 29.3.21
 + This software are only tested under Manjaro 20, Python 3.9.2, 29.3.21
++ This software are only tested under Manjaro and Ubuntu 20 in a executable file.
