@@ -40,8 +40,7 @@ PIL
 
 # FOR PLACES.
 # Get the folder containing the images of places from the user.
-places = './places'
-
+places = '/home/marco/Documentos/place_number_trainer/places'
 if not places:
     sg.popup_cancel('Cancelling')
     raise SystemExit()
@@ -68,7 +67,7 @@ del plist0
 # FOR NUMBERS.
 
 # Get the folder containing the images of places from the user.
-numbers = './numbers'
+numbers = '/home/marco/Documentos/place_number_trainer/numbers'
 if not numbers:
     sg.popup_cancel('Cancelling')
     raise SystemExit()
@@ -122,7 +121,7 @@ pfilename = os.path.join(places, pnames[0])   # Name of first file in list.
 nfilename = os.path.join(numbers, nnames[0])  # Name of first file in list.
 image_elem = sg.Image(data=get_mix_img_data(pfilename,nfilename, first=True)) # Put pic in window.
 filename_display_elem = sg.Text(pfilename, size=(80, 3)) # Display elem.
-file_num_display_elem = sg.Text('file 1 of {}'.format(num_files), size=(15, 1))
+file_num_display_elem = sg.Text(('Go!'), size=(15, 1))
 
 # Structure files in columns to display result.
 col_files = [[sg.Button('Prev', size=(8, 2)),sg.Button('Next', size=(8, 2)), file_num_display_elem],
@@ -149,26 +148,26 @@ while True:
             i -= num_files
         pfilename = os.path.join(places, pnames[i])  # Same name file place.
         nfilename = os.path.join(numbers, nnames[i]) # Same name file number.
-
+        print(pfilename,nfilename)
     elif event in ('Prev', 'MouseWheel:Up', 'Up:38', 'Prior:33'):
         i -= 1
         if i < 0:
             i = num_files + i
         pfilename = os.path.join(places, pnames[i])  # Same name file place.
         nfilename = os.path.join(numbers, nnames[i]) # Same name file number.
-    elif event == 'listbox':                    # Something from the listbox.
-        f = values["listbox"][0]                # Selected filename.
-        pfilename = os.path.join(places, f)     # Read this file.
-        i = pnames.index(f)                     # Update running index.
+        print(pfilename,nfilename)
+    elif event == 'listbox':                         # Something from the listbox.
+        f = values["listbox"][0]                     # Selected filename.
+        pfilename = os.path.join(places, f)          # Read this file.
+        i = pnames.index(f)                          # Update running index.
     else:
         pfilename = os.path.join(places, pnames[i])
         nfilename = os.path.join(numbers, nnames[i])
-    
+        print(pfilename,nfilename)
     # Update window with new image.
     image_elem.update(data=get_mix_img_data(pfilename, nfilename, first=True))
     # Update window with filename.
-    #filename_display_elem.update(pfilename)
     # Update page display.
-    file_num_display_elem.update('Place: {} num: {}'.format(i, i))
-
+    #file_num_display_elem.update('Place: {} num: {}'.format(i, i))
+    file_num_display_elem.update('Loci:{} Peg:{}'.format(pfilename[-7:-4], nfilename[-7:-4]))
 window.close()
