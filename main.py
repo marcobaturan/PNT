@@ -7,7 +7,7 @@ import os
 from PIL import Image, ImageTk
 import io
 
-"""Place Number Trainer v1.0
+"""Place Number Trainer v2.6
    -------------------------
    
    
@@ -99,17 +99,20 @@ del nlist0
 
 def get_mix_img_data(p,n, maxsize=(500, 500), first=False):
     """Generate image data using PIL
+        Place, Number, size -> Image
     """
-    img = Image.open(p).convert("RGBA") # Open pic in rgba mode.
-    img.thumbnail(maxsize)              # Maximize pic.
-    peg = Image.open(n).convert("RGBA") # Open pic in rgba mode.
-    peg.thumbnail((100,100))            # Maximize pic.
-    img.paste(peg, (200,200),peg)       # passte small pic in big pic.
+    img = Image.open(p).convert("RGBA") # Open pic place in rgba mode.
+    img.thumbnail(maxsize)              # Maximize pic place.
+    peg = Image.open(n).convert("RGBA") # Open pic number in rgba mode.
+    peg.thumbnail((100,100))            # Maximize pic number.
+    x = int(.5*img.size[0])             # Get x mid dim from background.
+    y = int(.5*img.size[1])             # Get y mid dim from brackground.
+    img.paste(peg, (x, y),peg)          # passte front in background.
     if first:                           # tkinter is inactive the first time.
-        bio = io.BytesIO()
+        bio = io.BytesIO()              # Instance class i7o bytes
         img.save(bio, format="PNG")     # Store in IO data the pic.
-        del img
-        return bio.getvalue()
+        del img                         # Delete image list
+        return bio.getvalue()           # Return the value from i/= bitrate picture.
     return ImageTk.PhotoImage(img)      # Commposed pic is returned.
 # ------------------------------------------------------------------------------
 
@@ -121,7 +124,7 @@ pfilename = os.path.join(places, pnames[0])   # Name of first file in list.
 nfilename = os.path.join(numbers, nnames[0])  # Name of first file in list.
 image_elem = sg.Image(data=get_mix_img_data(pfilename,nfilename, first=True)) # Put pic in window.
 filename_display_elem = sg.Text(pfilename, size=(80, 3)) # Display elem.
-file_num_display_elem = sg.Text(('Go!'), size=(15, 1))
+file_num_display_elem = sg.Text(('Go!'), size=(15, 1)) # Initial display message, then change with indexes.
 
 # Structure files in columns to display result.
 col_files = [[sg.Button('Prev', size=(8, 2)),sg.Button('Next', size=(8, 2)), file_num_display_elem],
@@ -142,28 +145,25 @@ while True:
     # Perform button and keyboard operations.
     if event == sg.WIN_CLOSED:
         break
-    elif event in ('Next', 'MouseWheel:Down', 'Down:40', 'Next:34'):
+    elif event in ('Next', 'MouseWheel:Down', 'Down:40', 'Next:34'): # control key
         i += 1
         if i >= num_files:
             i -= num_files
         pfilename = os.path.join(places, pnames[i])  # Same name file place.
         nfilename = os.path.join(numbers, nnames[i]) # Same name file number.
-        print(pfilename,nfilename)
-    elif event in ('Prev', 'MouseWheel:Up', 'Up:38', 'Prior:33'):
+    elif event in ('Prev', 'MouseWheel:Up', 'Up:38', 'Prior:33'): # control key
         i -= 1
         if i < 0:
             i = num_files + i
         pfilename = os.path.join(places, pnames[i])  # Same name file place.
         nfilename = os.path.join(numbers, nnames[i]) # Same name file number.
-        print(pfilename,nfilename)
     elif event == 'listbox':                         # Something from the listbox.
         f = values["listbox"][0]                     # Selected filename.
         pfilename = os.path.join(places, f)          # Read this file.
         i = pnames.index(f)                          # Update running index.
     else:
-        pfilename = os.path.join(places, pnames[i])
-        nfilename = os.path.join(numbers, nnames[i])
-        print(pfilename,nfilename)
+        pfilename = os.path.join(places, pnames[i])  # Same name file place.
+        nfilename = os.path.join(numbers, nnames[i]) # Same name file number.
     # Update window with new image.
     image_elem.update(data=get_mix_img_data(pfilename, nfilename, first=True))
     # Update window with filename.
